@@ -1,12 +1,113 @@
-# React + Vite
+# 🚀 Task Management System (React + Node.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a **Task Management System** built using **React** for the frontend and **Node.js (MERN stack)** for the backend.  
+It supports **user authentication, task creation, admin management, and notifications.**
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📂 Project Structure
 
-## Expanding the ESLint configuration
+```bash
+/task-management-app/
+├── public/
+│   ├── index.html
+│   └── assets/
+├── src/
+│   ├── components/
+│   │   ├── auth/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Signup.jsx
+│   │   │   └── ForgotPassword.jsx
+│   │   ├── common/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   └── Notification.jsx
+│   │   ├── user/
+│   │   │   ├── UserDashboard.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── TaskCard.jsx
+│   │   │   └── CreateTaskModal.jsx
+│   │   └── admin/
+│   │       ├── AdminDashboard.jsx
+│   │       ├── UserManagement.jsx
+│   │       └── TaskVerification.jsx
+│   ├── contexts/
+│   │   ├── AuthContext.jsx
+│   │   └── NotificationContext.jsx
+│   ├── hooks/
+│   │   ├── useAuth.js
+│   │   └── useTasks.js
+│   ├── utils/
+│   │   ├── api.js
+│   │   ├── dateFormatter.js
+│   │   └── validators.js
+│   ├── pages/
+│   │   ├── Landing.jsx
+│   │   ├── UserPages/
+│   │   │   ├── Dashboard.jsx
+│   │   │   └── ProfilePage.jsx
+│   │   └── AdminPages/
+│   │       ├── Dashboard.jsx
+│   │       └── Users.jsx
+│   ├── App.jsx
+│   ├── index.jsx
+│   └── index.css
+├── tailwind.config.js
+└── package.json
+```
+# React Project Setup
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation
+
+Follow these steps to set up the project and install necessary dependencies.
+
+### 1. Clone the Repository
+```sh
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+```
+
+### 2. Install Dependencies
+Run the following command to install required packages:
+```sh
+npm install
+```
+
+### 3. Install Additional Dependencies
+Make sure to install the following:
+
+#### React Router DOM
+```sh
+npm install react-router-dom
+```
+
+#### Tailwind CSS
+```sh
+npm install -D tailwindcss@3 postcss autoprefixer
+npx tailwindcss init -p
+```
+
+### 4. Configure Tailwind CSS
+Edit **tailwind.config.js** to include the paths to your files:
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
+
+### 5. Start the Development Server
+Run the following command to start the app:
+```sh
+npm run dev
+```
+
+
+
