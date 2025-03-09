@@ -1,20 +1,36 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
-// Create the authentication context
-export const AuthContext = createContext();
+const AuthContext = createContext();
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 const AuthProvider = ({ children }) => {
-  // State to hold user data
   const [user, setUser] = useState(null);
 
-  // Function to log in the user
-  const login = (userData) => setUser(userData);
+  const signup = (email, password) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setUser({ email });
+        localStorage.setItem("user", JSON.stringify({ email }));
+        resolve();
+      }, 1000);
+    });
+  };
 
-  // Function to log out the user
-  const logout = () => setUser(null);
+  const login = (email) => {
+    setUser({ email });
+    localStorage.setItem("user", JSON.stringify({ email }));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, signup, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
