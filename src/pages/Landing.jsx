@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -136,15 +136,6 @@ const Landing = () => {
               <h3 className="text-xl font-medium text-gray-900">Team Collaboration</h3>
               <p className="mt-2 text-gray-600">Work together with your team in real-time on shared projects.</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-gray-500 text-sm">
-            <p>© 2025 TaskFlow. All rights reserved.</p>
           </div>
         </div>
       </div>
