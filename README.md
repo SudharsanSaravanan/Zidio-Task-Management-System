@@ -101,7 +101,7 @@ module.exports = {
   },
   plugins: [],
 };
-```
+
 
 ### 5. Start the Development Server
 Run the following command to start the app:
@@ -109,5 +109,23 @@ Run the following command to start the app:
 npm run dev
 ```
 
+### 6. Drag and Drop (DND)
 
+npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/accessibility
 
+@dnd-kit/core – Core library for drag-and-drop interactions.
+@dnd-kit/sortable – Enables sorting of draggable elements.
+@dnd-kit/accessibility – Improves accessibility for drag-and-drop interactions
+
+### 7. Data Visualization (Charts & Graphs)
+
+npm install chart.js react-chartjs-2
+
+chart.js – JavaScript charting library for analytics and reports.
+react-chartjs-2 – React wrapper for chart.js.
+
+### 8. Icons & Utility Libraries
+
+npm install react-icons
+
+react-icons – Provides icons for buttons, sidebars, etc
