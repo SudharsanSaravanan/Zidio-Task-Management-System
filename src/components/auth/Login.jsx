@@ -11,23 +11,60 @@ const Login = () => {
   const [error, setError] = useState("");
 
   // Extract role from state or default to "user"
-  const role = location.state?.role || "user";
+  const role = location.state?.role;
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await login(email, password);
+
+  //     // Redirect based on role
+  //     if (role === "admin") {
+  //       navigate("/admin/dashboard");
+  //     } else {
+  //       navigate("/user/dashboard");
+  //     }
+  //   } catch (err) {
+  //     setError("Invalid email or password");
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      
+        //console.log("Attempting to log in with:", email, password); // ✅ Debugging step
 
-      // Redirect based on role
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password,role}),
+        });
+
+        const data = await response.json();
+        //console.log("Login Response:", data); // Check what backend is returning
+
+        if (!response.ok) {
+            setError(data.message || "Invalid credentials");
+            return;
+        }
+
+        // Save token in local storage or context
+        localStorage.setItem("token", data.token);
+      //  console.log("Token stored:", data.token);
+
+        // Redirect based on role
+        if (data.role === "admin") {
+            navigate("/admin/dashboard");
+        } else {
+            navigate("/user/dashboard");
+        }
     } catch (err) {
-      setError("Invalid email or password");
+      //  console.error("Login error:", err);
+        setError("Server error, please try again.");
     }
-  };
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
