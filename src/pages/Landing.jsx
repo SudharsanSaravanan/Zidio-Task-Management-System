@@ -50,7 +50,7 @@ const Landing = () => {
                     Sign Up as User
                   </button>
                   <button
-                    onClick={() => navigate("/user/dashboard", { state: { role: "user" } })}
+                    onClick={() => navigate("/login", { state: { role: "user" } })}
                     className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     Log In as User

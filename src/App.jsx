@@ -6,7 +6,9 @@ import UserDashboard from "./pages/UserPages/Dashboard";
 import ProfilePage from "./pages/UserPages/ProfilePage";
 import Dashboard from "./pages/AdminPages/Dashboard";
 import Users from "./pages/AdminPages/Users";
+import CalendarPage from "./pages/UserPages/CalendarPage";
 import AuthProvider from "./contexts/AuthContext";
+import NotificationsPage from "./pages/UserPages/NotificationsPage";
 import NotificationProvider from "./contexts/NotificationContext";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
@@ -29,7 +31,9 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/user/dashboard" element={<UserDashboard />} />
-            <Route path="/profile" element={<ProfilePage />} />
+             <Route path="/user/notifications" element={<NotificationsPage />} />
+            <Route path="/user/calendar" element={<CalendarPage />} />
+            <Route path="/user/profile" element={<ProfilePage />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/manage-users" element={<ManageUsers />} />
 <Route path="/admin/manage-tasks" element={<ManageTasks />} />
