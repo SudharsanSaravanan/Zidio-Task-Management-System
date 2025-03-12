@@ -129,3 +129,27 @@ react-chartjs-2 – React wrapper for chart.js.
 npm install react-icons
 
 react-icons – Provides icons for buttons, sidebars, etc
+
+### 9. Routing & Navigation
+
+npm install react-router-dom
+
+Navigation between different pages
+
+### 10. Notifications & Alerts
+
+npm install react-toastify
+
+Displaying toast messages for task deadlines, errors, and status updates.
+
+### 11.  Date & Time Handling
+
+npm install date-fns
+
+Formatting and calculating task deadlineS.
+
+### 12. Calendar & Scheduling
+
+npm install react-big-calendar
+
+Displaying tasks in a calendar view.
