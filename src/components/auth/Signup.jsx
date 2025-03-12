@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import axios from "axios";
 const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -10,7 +10,7 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  const { signup } = useAuth();
+ // const { signup } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState("");
@@ -31,18 +31,62 @@ const Signup = () => {
       return;
     }
 
-    try {
-      await signup(formData.email, formData.password);
+//     try {
+//       //await signup(formData.email, formData.password);
+// const res = await axios.post("http://localhost:5000/api/auth/register" , {
+// fullName: formData.fullName,
+//         email: formData.email,
+//         password: formData.password,
+//         role: role,
+// });
+// console.log("Signup Success:", res.data);
 
-      // Redirect based on role
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
-    } catch (err) {
-      setError("Failed to create an account. Try again.");
+// if (res.data.token) {
+//   // Save Token in Local Storage
+//   localStorage.setItem("token", res.data.token);
+
+//       // Redirect based on role
+//       if (role === "admin") {
+//         navigate("/admin/dashboard");
+//       } else {
+//         navigate("/user/dashboard");
+//       }
+      
+//     }
+//     else {
+//       setError("Failed to receive token. Try again.");
+//     }
+//     } catch (err) {
+//       console.log(err);
+//       setError("Failed to create an account. Try again.");
+//     }
+try {
+  const res = await axios.post("http://localhost:5000/api/auth/register", {
+    fullName: formData.fullName,
+    email: formData.email,
+    password: formData.password,
+    role: role, // Send role from frontend
+  });
+
+  //console.log("Signup Success:", res.data);
+
+  if (res.data.token) {
+    // Save Token in Local Storage
+    localStorage.setItem("token", res.data.token);
+
+    // Redirect Based on Role
+    if (role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/user/dashboard");
     }
+  } else {
+    setError("Failed to receive token. Try again.");
+  }
+} catch (err) {
+  console.error("Signup Error:", err.response?.data || err);
+  setError(err.response?.data?.message || "Failed to create an account. Try again.");
+}
   };
 
   return (
