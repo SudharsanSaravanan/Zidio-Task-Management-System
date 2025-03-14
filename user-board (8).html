@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <!-- Welcome Message -->
+    <div class="bg-white p-4 shadow-md rounded-lg mb-6 text-center">
+        <h1 class="text-2xl font-bold text-gray-700">Welcome, <span id="username" class="text-blue-600">User</span>!</h1>
+        <p class="text-gray-500">Track your tasks and meet your deadlines.</p>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-6 text-center">User Dashboard</h1>
+
+    <!-- Task Input Form -->
+    <div class="bg-white p-6 shadow-md rounded-lg mb-6">
+        <h2 class="text-xl font-bold mb-4">Add New Task</h2>
+        <input type="text" id="taskName" placeholder="Task Name" class="border p-2 rounded w-full mb-2">
+        <input type="date" id="taskDeadline" class="border p-2 rounded w-full mb-2">
+        <button onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Add Task</button>
+    </div>
+
+    <!-- Task Statistics -->
+    <div class="grid grid-cols-2 gap-6 mb-6">
+        <div class="bg-white p-4 shadow-md rounded-lg">
+            <h2 class="text-lg font-semibold">Pending Tasks</h2>
+            <p id="pendingTasks" class="text-3xl font-bold text-red-600">0</p>
+        </div>
+        <div class="bg-white p-4 shadow-md rounded-lg">
+            <h2 class="text-lg font-semibold">Completed Tasks</h2>
+            <p id="completedTasks" class="text-3xl font-bold text-green-600">0</p>
+        </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="bg-white p-6 shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-4">My Tasks</h2>
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Task Name</th>
+                    <th class="border p-2">Status</th>
+                    <th class="border p-2">Deadline</th>
+                    <th class="border p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskTableBody">
+                <!-- Dynamic tasks will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Task Analytics Chart -->
+    <div class="bg-white p-6 mt-6 shadow-md rounded-lg" style="max-width: 400px; height: 300px; margin: auto;">
+        <h2 class="text-xl font-bold mb-4">Task Analytics</h2>
+        <canvas id="taskChart" style="max-height: 250px;"></canvas>
+    </div>
+
+    <!-- JavaScript for Dynamic Task List & Chart.js -->
+    <script>
+        document.getElementById("username").textContent = localStorage.getItem("username") || "User";
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        function updateTaskList() {
+            const tableBody = document.getElementById("taskTableBody");
+            tableBody.innerHTML = "";
+
+            let pending = tasks.filter(task => task.status === "Pending").length;
+            let completed = tasks.filter(task => task.status === "Completed").length;
+
+            document.getElementById("pendingTasks").textContent = pending;
+            document.getElementById("completedTasks").textContent = completed;
+
+            tasks.forEach((task, index) => {
+                const row = `<tr>
+                    <td class="border p-2">${task.name}</td>
+                    <td class="border p-2 ${task.status === "Completed" ? "text-green-500" : "text-red-500"}">
+                        ${task.status}
+                    </td>
+                    <td class="border p-2">${task.deadline}</td>
+                    <td class="border p-2">
+                        <button onclick="deleteTask(${index})" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                        <button onclick="toggleStatus(${index})" class="bg-yellow-500 text-white px-2 py-1 rounded ml-2">Toggle Status</button>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            updateChart(pending, completed);
+        }
+
+        function addTask() {
+            const taskName = document.getElementById("taskName").value.trim();
+            const taskDeadline = document.getElementById("taskDeadline").value;
+            if (taskName && taskDeadline) {
+                tasks.push({ name: taskName, status: "Pending", deadline: taskDeadline });
+                document.getElementById("taskName").value = "";
+                document.getElementById("taskDeadline").value = "";
+                updateTaskList();
+            }
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            updateTaskList();
+        }
+
+        function toggleStatus(index) {
+            tasks[index].status = tasks[index].status === "Pending" ? "Completed" : "Pending";
+            updateTaskList();
+        }
+
+        function updateChart(pending, completed) {
+            const ctx = document.getElementById('taskChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{ barThickness: 15, maxBarThickness: 20, categoryPercentage: 0.5, barPercentage: 0.7,
+                        label: 'Task Statistics',
+                        data: [5, 8, 12, 7, 10, 15, 9, 14, 11, 6, 13, 8],
+                        backgroundColor: ['#EF4444', '#10B981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = updateTaskList;
+    </script>
+
+</body>
+</html>
