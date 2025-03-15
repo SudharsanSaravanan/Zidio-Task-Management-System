@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
-
+// import { useLayoutEffect } from "react";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,6 +12,11 @@ const Login = () => {
 
   // Extract role from state or default to "user"
   const role = location.state?.role;
+
+  // navabar visibility is false
+//   useLayoutEffect(() => {
+//     setNavbar(false);
+// })
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -28,6 +33,9 @@ const Login = () => {
   //     setError("Invalid email or password");
   //   }
   // };
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -96,7 +104,9 @@ const Login = () => {
               required
             />
           </div>
-          <button
+
+          {/*login navigates to user and admin dashboard */}
+           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
           >
