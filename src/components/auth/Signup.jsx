@@ -2,19 +2,13 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useLayoutEffect } from "react";
-const Signup = ({setNavbar}) => {
+const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  //navbar visibility is set to false
-  useLayoutEffect(() => {
-    setNavbar(false);
-})
-
 
  // const { signup } = useAuth();
   const navigate = useNavigate();
