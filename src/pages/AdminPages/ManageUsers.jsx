@@ -1,29 +1,42 @@
 import React, { useState } from "react";
 import Sidebar from "../../components/admin/Sidebar";
-
+import { useEffect } from "react";
+//import { useState } from "react";
 const ManageUsers = () => {
   // Dummy user data
-  const [users, setUsers] = useState([
-    { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
-    { id: 3, name: "Mike Johnson", email: "mike@example.com", role: "User" },
-  ]);
-
+  // const [users, setUsers] = useState([
+  //   { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
+  //   { id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
+  //   { id: 3, name: "Mike Johnson", email: "mike@example.com", role: "User" },
+  // ]);
+  // const [users, setUsers] = useState([]);
+  const [user, setUsers] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/admin/users") // Backend API
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((err) => console.error("Error fetching users:", err));
+  }, []);
   const [editingUser, setEditingUser] = useState(null);
-  const [editedData, setEditedData] = useState({ name: "", email: "", role: "" });
+  const [editedData, setEditedData] = useState({ fullName: "", email: "", role: "" });
 
-  const startEditing = (user) => {
-    setEditingUser(user.id);
-    setEditedData({ name: user.name, email: user.email, role: user.role });
+  const startEditing = (selectedUser) => {
+    setEditingUser(selectedUser.email);
+    setEditedData({ fullName: selectedUser.fullName, email: selectedUser.email, role: selectedUser.role });
   };
 
-  const saveUser = (id) => {
-    setUsers(users.map(user => (user.id === id ? { ...user, ...editedData } : user)));
+  // const saveUser = (email) => {
+  //   setUsers(user.map(user => (user.email === email ? { ...user, ...editedData } : user)));
+  //   setEditingUser(null);
+  // };
+  const saveUser = (email) => {
+    setUsers(
+      user.map((u) => (u.email === email ? { ...u, ...editedData } : u))
+    );
     setEditingUser(null);
   };
-
-  const deleteUser = (id) => {
-    setUsers(users.filter(user => user.id !== id));
+  const deleteUser = (email) => {
+    setUsers(user.filter(user => user.email !== email));
   };
 
   return (
@@ -48,17 +61,17 @@ const ManageUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className="border-b">
-                  {editingUser === user.id ? (
+              {user.map((user) => (
+                <tr key={user.email} className="border-b">
+                  {editingUser === user.email ? (
                     <>
-                      <td className="p-2">{user.id}</td>
+                      <td className="p-2">{user.email}</td>
                       <td className="p-2">
                         <input
                           type="text"
                           className="border p-1 rounded w-full"
-                          value={editedData.name}
-                          onChange={(e) => setEditedData({ ...editedData, name: e.target.value })}
+                          value={editedData.fullName}
+                          onChange={(e) => setEditedData({ ...editedData, fullName: e.target.value })}
                         />
                       </td>
                       <td className="p-2">
@@ -82,7 +95,7 @@ const ManageUsers = () => {
                       <td className="p-2">
                         <button
                           className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                          onClick={() => saveUser(user.id)}
+                          onClick={() => saveUser(user.email)}
                         >
                           Save
                         </button>
@@ -97,7 +110,7 @@ const ManageUsers = () => {
                   ) : (
                     <>
                       <td className="p-2">{user.id}</td>
-                      <td className="p-2">{user.name}</td>
+                      <td className="p-2">{user.fullName}</td>
                       <td className="p-2">{user.email}</td>
                       <td className="p-2">{user.role}</td>
                       <td className="p-2">
@@ -109,7 +122,7 @@ const ManageUsers = () => {
                         </button>
                         <button
                           className="bg-red-500 text-white px-3 py-1 rounded ml-2 hover:bg-red-600"
-                          onClick={() => deleteUser(user.id)}
+                          onClick={() => deleteUser(user.email)}
                         >
                           Delete
                         </button>
@@ -121,7 +134,7 @@ const ManageUsers = () => {
             </tbody>
           </table>
 
-          {users.length === 0 && <p className="text-gray-500 text-center mt-4">No users found.</p>}
+          {user.length === 0 && <p className="text-gray-500 text-center mt-4">No users found.</p>}
         </div>
       </div>
     </div>
