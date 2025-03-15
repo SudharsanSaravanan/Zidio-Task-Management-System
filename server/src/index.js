@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const User = require("./models/User");
 
 const authRoutes = require('./routes/authRoutes');
 
@@ -35,3 +36,20 @@ app.get("/",(req,res)=>{
 })
 const adminRoutes = require("./routes/admindash");
 app.use("/admin", adminRoutes);
+
+app.delete("/admin/users/:email", async (req, res) => {
+    try {
+      const { email } = req.params;
+  
+      const result = await User.deleteOne({ email });
+  
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+     // console.error("Error deleting user:", error);
+      res.status(500).json({ error: "Failed to delete user" });
+    }
+  });
