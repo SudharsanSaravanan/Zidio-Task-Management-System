@@ -25,11 +25,7 @@ const Dashboard = () => {
           <TaskChart />
         </div>
 
-        {/* Recent Activity Section */}
-        <div className="mt-6 bg-white p-4 shadow rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">Recent Activity</h3>
-          <p className="text-gray-600">No recent updates...</p>
-        </div>
+        
       </div>
     </div>
   );

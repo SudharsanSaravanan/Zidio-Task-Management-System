@@ -60,17 +60,7 @@ const Settings = () => {
                 onChange={handleProfileChange}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium">New Password:</label>
-              <input
-                type="password"
-                name="password"
-                className="border p-2 rounded w-full"
-                value={profile.password}
-                onChange={handleProfileChange}
-                placeholder="Enter new password"
-              />
-            </div>
+            
           </div>
         </div>
 
