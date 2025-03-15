@@ -6,7 +6,7 @@ const statusStyles = {
   const PendingTasks = () => {
     const tasks = [
       { name: "Fix login issue", user: "Alice", status: "Pending" },
-      { name: "Update dashboard UI", user: "Bob", status: "In Progress" },
+      { name: "Update dashboard UI", user: "Bob", status: "Pending" },
       { name: "Database migration", user: "Charlie", status: "Pending" },
     ];
   

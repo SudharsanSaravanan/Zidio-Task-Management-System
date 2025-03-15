@@ -8,6 +8,8 @@ import ProfilePage from "../../pages/UserPages/ProfilePage";
 import Column from "./Column";
 import SortableItem from "./SortableItem";
 import notificationSound from "../../assets/notification.mp3";
+import UserTaskAnalytics from "../../components/user/UserTaskAnalytics";
+
 
 const UserDashboard = () => {
   const [tasks, setTasks] = useState({
@@ -71,8 +73,12 @@ const UserDashboard = () => {
             ))}
           </div>
         </DndContext>
+
+        <UserTaskAnalytics completedTasks={[5, 10, 7, 12]} pendingTasks={[3, 2, 5, 1]} />
       </div>
     </div>
+
+
   );
 };
 
