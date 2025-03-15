@@ -155,7 +155,7 @@ npm install react-big-calendar
 Displaying tasks in a calendar view.
 
 ### for backend 
-npm install bcryptjs cors dotenv express jsonwebtoken mongodb mongoose
+npm install bcryptjs,cors,dotenv,express,jsonwebtoken,mongodb,mongoose
 
 ## to run server just do -
 cd server
