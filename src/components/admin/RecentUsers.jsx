@@ -1,12 +1,24 @@
 import React from "react";
-
+import { useState } from "react";
+import { useEffect } from "react";
 const RecentUsers = () => {
-  const users = [
-    { name: "Alice Johnson", email: "alice@example.com", date: "2025-03-10" },
-    { name: "Bob Smith", email: "bob@example.com", date: "2025-03-09" },
-    { name: "Charlie Brown", email: "charlie@example.com", date: "2025-03-08" },
-  ];
+  // const users = [
+  //   { name: "Alice Johnson", email: "alice@example.com", date: "2025-03-10" },
+  //   { name: "Bob Smith", email: "bob@example.com", date: "2025-03-09" },
+  //   { name: "Charlie Brown", email: "charlie@example.com", date: "2025-03-08" },
+  // ];
 
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/admin/users") // API URL
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((err) => console.error(err));
+  }, []);
+  const formatDate = (utcDate) => {
+    return new Date(utcDate).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+};
   return (
     <div className="bg-white p-4 shadow rounded-lg col-span-2">
       <h3 className="text-xl font-semibold mb-4">Recent Users</h3>
@@ -26,9 +38,9 @@ const RecentUsers = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="p-2 border border-gray-200">{user.name}</td>
+                <td className="p-2 border border-gray-200">{user.fullName}</td>
                 <td className="p-2 border border-gray-200">{user.email}</td>
-                <td className="p-2 border border-gray-200">{user.date}</td>
+                <td className="p-2 border border-gray-200">{formatDate(user.createdAt)}</td>
               </tr>
             ))}
           </tbody>

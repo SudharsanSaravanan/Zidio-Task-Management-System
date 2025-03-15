@@ -33,3 +33,5 @@ mongoose.connect(mongoURI)
 app.get("/",(req,res)=>{
     res.send("hello worldji!!")
 })
+const adminRoutes = require("./routes/admindash");
+app.use("/admin", adminRoutes);
