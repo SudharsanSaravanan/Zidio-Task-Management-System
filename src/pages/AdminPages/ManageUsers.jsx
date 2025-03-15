@@ -35,10 +35,24 @@ const ManageUsers = () => {
     );
     setEditingUser(null);
   };
-  const deleteUser = (email) => {
-    setUsers(user.filter(user => user.email !== email));
+  // const deleteUser = (email) => {
+  //   setUsers(user.filter(user => user.email !== email));
+  // };
+  const deleteUser = async (email) => {
+    try {
+      const res = await fetch(`http://localhost:5000/admin/users/${email}`, {
+        method: "DELETE",
+      });
+  
+      if (!res.ok) {
+        throw new Error("Failed to delete user");
+      }
+  
+      setUsers(user.filter((u) => u.email !== email));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
-
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
