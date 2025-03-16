@@ -3,16 +3,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require("./models/User");
-
+const bodyParser = require("body-parser");
 const authRoutes = require('./routes/authRoutes');
-
+const forgotPassRoutes = require("./routes/forgetPasswordRoute");
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
-
+app.use("/api", forgotPassRoutes);
 const PORT = process.env.PORT || 5000;
 // mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 //     .then(() => {
@@ -53,3 +54,9 @@ app.delete("/admin/users/:email", async (req, res) => {
       res.status(500).json({ error: "Failed to delete user" });
     }
   });
+
+  app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    next();
+  });
+  
