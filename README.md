@@ -156,6 +156,7 @@ Displaying tasks in a calendar view.
 
 ### for backend 
 npm install bcryptjs,cors,dotenv,express,jsonwebtoken,mongodb,mongoose
+npm install crypto nodemailer
 
 ## to run server just do -
 cd server

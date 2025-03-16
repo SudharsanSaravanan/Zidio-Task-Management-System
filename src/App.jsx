@@ -18,6 +18,7 @@ import ForgotPassword from "./components/auth/ForgotPassword";
 import ManageUsers from "./pages/AdminPages/ManageUsers";
 import ManageTasks from "./pages/AdminPages/ManageTasks";
 import Settings from "./pages/AdminPages/Settings";
+import ResetPassword from "./components/auth/ResetPassword";
 function App() {
   return (
     <AuthProvider>
@@ -29,6 +30,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/user/dashboard" element={<UserDashboard />} />
              <Route path="/user/notifications" element={<NotificationsPage />} />
