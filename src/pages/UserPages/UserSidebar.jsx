@@ -10,7 +10,7 @@ const UserSidebar = () => {
 
       <ul className="space-y-3">
         {[
-          { path: "/user/userdashboard", label: " Dashboard" },
+          { path: "/user/dashboard", label: " Dashboard" },
           { path: "/user/TaskCard", label: " View Tasks" },
           { path: "/user/calendar", label: " Calendar" },
           { path: "/user/notifications", label: " Notifications" },
