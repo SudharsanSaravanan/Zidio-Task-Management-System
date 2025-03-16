@@ -33,6 +33,7 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/user/dashboard" element={<UserDashboard />} />
+            
              <Route path="/user/notifications" element={<NotificationsPage />} />
             <Route path="/user/calendar" element={<CalendarPage />} />
             <Route path="/user/profile" element={<ProfilePage />} />
