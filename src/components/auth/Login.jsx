@@ -104,9 +104,12 @@ const Login = () => {
           </button>
         </form>
         <div className="text-center mt-3">
-          <a href="/forgot-password" className="text-blue-500 text-sm hover:underline">
-            Forgot Password?
-          </a>
+        <span
+    className="text-blue-500 text-sm hover:underline cursor-pointer"
+    onClick={() => navigate("/forgot-password", { state: { role } })}
+  >
+    Forgot Password?
+  </span>
         </div>
       </div>
     </div>

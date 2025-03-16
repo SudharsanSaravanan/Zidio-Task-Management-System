@@ -156,11 +156,12 @@ try {
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <span
-             className="text-blue-500 hover:underline cursor-pointer"
-             onClick={() => navigate("/login", { state: { role } })}
-            >
-            Log in
-            </span>
+  className="text-blue-500 hover:underline cursor-pointer"
+  onClick={() => navigate("/login", { state: { role } })}
+>
+  Log in
+</span>
+
           </p>
         </div>
       </div>
