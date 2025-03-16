@@ -10,10 +10,11 @@ const UserSidebar = () => {
 
       <ul className="space-y-3">
         {[
-          { path: "/user/dashboard", label: " Dashboard" },
-          { path: "/user/TaskCard", label: " View Tasks" },
-          { path: "/user/calendar", label: " Calendar" },
-          { path: "/user/notifications", label: " Notifications" },
+          { path: "/user/dashboard", label: "Dashboard" },
+          { path: "/user/userpage", label: "View Tasks" },
+          { path: "/user/TaskCard", label: "View Tasks" },
+          { path: "/user/calendar", label: "Calendar" },
+          { path: "/user/notifications", label: "Notifications" },
           { path: "/user/profile", label: "Profile" },
         ].map(({ path, label }) => (
           <li key={path}>
