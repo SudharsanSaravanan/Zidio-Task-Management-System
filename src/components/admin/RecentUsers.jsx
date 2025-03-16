@@ -13,7 +13,10 @@ const RecentUsers = () => {
   useEffect(() => {
     fetch("http://localhost:5000/admin/users") // API URL
       .then((res) => res.json())
-      .then((data) => setUsers(data))
+      .then((data) => {
+        const sortedUsers = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setUsers(sortedUsers);
+      })
       .catch((err) => console.error(err));
   }, []);
   const formatDate = (utcDate) => {

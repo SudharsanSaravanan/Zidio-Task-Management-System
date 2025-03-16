@@ -14,7 +14,10 @@ const ManageUsers = () => {
   useEffect(() => {
     fetch("http://localhost:5000/admin/users") // Backend API
       .then((res) => res.json())
-      .then((data) => setUsers(data))
+      .then((data) => {
+        const sortedUsers = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setUsers(sortedUsers);
+      })
       .catch((err) => console.error("Error fetching users:", err));
   }, []);
   const [editingUser, setEditingUser] = useState(null);
@@ -75,77 +78,31 @@ const ManageUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {user.map((user) => (
-                <tr key={user.email} className="border-b">
-                  {editingUser === user.email ? (
-                    <>
-                      <td className="p-2">{user.email}</td>
-                      <td className="p-2">
-                        <input
-                          type="text"
-                          className="border p-1 rounded w-full"
-                          value={editedData.fullName}
-                          onChange={(e) => setEditedData({ ...editedData, fullName: e.target.value })}
-                        />
-                      </td>
-                      <td className="p-2">
-                        <input
-                          type="email"
-                          className="border p-1 rounded w-full"
-                          value={editedData.email}
-                          onChange={(e) => setEditedData({ ...editedData, email: e.target.value })}
-                        />
-                      </td>
-                      <td className="p-2">
-                        <select
-                          className="border p-1 rounded w-full"
-                          value={editedData.role}
-                          onChange={(e) => setEditedData({ ...editedData, role: e.target.value })}
-                        >
-                          <option value="Admin">Admin</option>
-                          <option value="User">User</option>
-                        </select>
-                      </td>
-                      <td className="p-2">
-                        <button
-                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                          onClick={() => saveUser(user.email)}
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="bg-gray-400 text-white px-3 py-1 rounded ml-2 hover:bg-gray-500"
-                          onClick={() => setEditingUser(null)}
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td className="p-2">{user.id}</td>
-                      <td className="p-2">{user.fullName}</td>
-                      <td className="p-2">{user.email}</td>
-                      <td className="p-2">{user.role}</td>
-                      <td className="p-2">
-                        <button
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                          onClick={() => startEditing(user)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="bg-red-500 text-white px-3 py-1 rounded ml-2 hover:bg-red-600"
-                          onClick={() => deleteUser(user.email)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </>
-                  )}
-                </tr>
-              ))}
-            </tbody>
+  {user
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by latest users first
+    .map((user, index) => (
+      <tr key={user.email} className="border-b">
+        <td className="p-2">{index + 1}</td> {/* Row number */}
+        <td className="p-2">{user.fullName}</td>
+        <td className="p-2">{user.email}</td>
+        <td className="p-2">{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</td>
+        <td className="p-2">
+          <button
+            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            onClick={() => startEditing(user)}
+          >
+            Edit
+          </button>
+          <button
+            className="bg-red-500 text-white px-3 py-1 rounded ml-2 hover:bg-red-600"
+            onClick={() => deleteUser(user.email)}
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ))}
+</tbody>
           </table>
 
           {user.length === 0 && <p className="text-gray-500 text-center mt-4">No users found.</p>}
