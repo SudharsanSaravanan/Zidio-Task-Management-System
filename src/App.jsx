@@ -1,5 +1,5 @@
 // App.jsx (Main App Component)
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import UserDashboard from "./pages/UserPages/Dashboard";
@@ -20,15 +20,14 @@ import ManageTasks from "./pages/AdminPages/ManageTasks";
 import Settings from "./pages/AdminPages/Settings";
 import ResetPassword from "./components/auth/ResetPassword";
 function App() {
-  const [showNavbar, setNavbar] = useState(true); // these are the state varibles to decide navbar visibility
   return (
     <AuthProvider>
       <NotificationProvider>
         <Router>
-         {showNavbar && <Navbar />}
+          <Navbar />
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/signup" element={<Signup setNavbar={setNavbar}/>} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
