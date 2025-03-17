@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import UserSidebar from "./UserSidebar";
 
 const ProfilePage = () => {
   // Load stored profile data
   const [profile, setProfile] = useState(() => {
     const savedProfile = JSON.parse(localStorage.getItem("userProfile"));
-    return savedProfile || { name: "", email: "", role: "", profilePic: "" };
+    return (
+      savedProfile || {
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        dob: "",
+        role: "",
+        linkedin: "",
+        github: "",
+        profilePic: "",
+      }
+    );
   });
 
   const [imagePreview, setImagePreview] = useState(profile.profilePic);
@@ -29,6 +41,7 @@ const ProfilePage = () => {
   const handleSave = () => {
     localStorage.setItem("userProfile", JSON.stringify(profile));
     alert("Profile updated successfully!");
+    window.location.reload(); // 🔄 Reload page after saving
   };
 
   return (
@@ -43,22 +56,26 @@ const ProfilePage = () => {
 
           {/* Profile Picture */}
           <div className="flex justify-center mb-6">
-  <label htmlFor="profilePic" className="cursor-pointer relative w-36 h-36 rounded-full border-4 border-white-300  flex items-center justify-center bg-white-200">
-    {imagePreview ? (
-      <img
-        src={imagePreview}
-        alt="Profile"
-        className="w-full h-full rounded-full object-cover"
-      />
-    ) : (
-      <span className="text-gray-600 text-lg font-medium">No Image</span>
-    )}
-  </label>
-  <input type="file" id="profilePic" accept="image/*" onChange={handleImageChange} className="hidden" />
-</div>
+            <label
+              htmlFor="profilePic"
+              className="cursor-pointer relative w-36 h-36 rounded-full border-4 border-gray-300 flex items-center justify-center bg-gray-200"
+            >
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Profile"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <span className="text-gray-600 text-lg font-medium">No Image</span>
+              )}
+            </label>
+            <input type="file" id="profilePic" accept="image/*" onChange={handleImageChange} className="hidden" />
+          </div>
 
           {/* Profile Details */}
           <div className="space-y-5">
+            {/* Name */}
             <div>
               <label className="block text-lg font-medium text-gray-700">Name</label>
               <input
@@ -70,6 +87,7 @@ const ProfilePage = () => {
               />
             </div>
 
+            {/* Email */}
             <div>
               <label className="block text-lg font-medium text-gray-700">Email</label>
               <input
@@ -81,6 +99,45 @@ const ProfilePage = () => {
               />
             </div>
 
+            {/* Phone Number */}
+            <div>
+              <label className="block text-lg font-medium text-gray-700">Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={profile.phone}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                placeholder="+91 9876543210"
+              />
+            </div>
+
+            {/* Address */}
+            <div>
+              <label className="block text-lg font-medium text-gray-700">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={profile.address}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                placeholder="123, Street, City, State"
+              />
+            </div>
+
+            {/* Date of Birth */}
+            <div>
+              <label className="block text-lg font-medium text-gray-700">Date of Birth</label>
+              <input
+                type="date"
+                name="dob"
+                value={profile.dob}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              />
+            </div>
+
+            {/* Role */}
             <div>
               <label className="block text-lg font-medium text-gray-700">Role</label>
               <input
@@ -89,6 +146,33 @@ const ProfilePage = () => {
                 value={profile.role}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                placeholder="Software Developer, Student, etc."
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div>
+              <label className="block text-lg font-medium text-gray-700">LinkedIn Profile</label>
+              <input
+                type="url"
+                name="linkedin"
+                value={profile.linkedin}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                placeholder="https://www.linkedin.com/in/yourprofile"
+              />
+            </div>
+
+            {/* GitHub */}
+            <div>
+              <label className="block text-lg font-medium text-gray-700">GitHub Profile</label>
+              <input
+                type="url"
+                name="github"
+                value={profile.github}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                placeholder="https://github.com/yourusername"
               />
             </div>
 

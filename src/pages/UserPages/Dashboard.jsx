@@ -13,7 +13,7 @@ const UserDashboard = () => {
   const [tasks, setTasks] = useState({
     "To Do": [
       { id: "1", title: "Design UI", description: "Create a sleek UI for the app", priority: "High", deadline: "2025-03-17" },
-      { id: "2", title: "Setup Database", description: "Initialize and structure the DB", priority: "Medium", deadline: "2025-03-16" },
+      { id: "2", title: "Setup Database", description: "Initialize and structure the DB", priority: "Medium", deadline: "2025-03-18" },
     ],
     "In Progress": [{ id: "3", title: "Develop Auth System", description: "Implement JWT-based auth", priority: "High", deadline: "2025-03-15" }],
     Completed: [{ id: "4", title: "Project Planning", description: "Outline roadmap and milestones", priority: "Low", deadline: "2025-03-05" }],
@@ -42,7 +42,7 @@ const UserDashboard = () => {
           const message = `Hurry up! Task "${task.title}" is due tomorrow!`;
           toast.warning(message, {
             icon: "⚠️",
-            style: { backgroundColor: "#FFCC00", color: "#000" },
+            style: { backgroundColor: "#FFF4B0", color: "#000" },
           });
           newNotifications.push(message);
           shouldPlaySound = true;
@@ -50,7 +50,7 @@ const UserDashboard = () => {
           const message = `URGENT! Task "${task.title}" is due TODAY!`;
           toast.error(message, {
             icon: "🚨",
-            style: { backgroundColor: "#FF4136", color: "#FFF" },
+            style: { backgroundColor: "#FF9999", color: "#FFF" },
           });
           newNotifications.push(message);
           shouldPlaySound = true;

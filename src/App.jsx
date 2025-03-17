@@ -5,6 +5,7 @@ import Landing from "./pages/Landing";
 import UserDashboard from "./pages/UserPages/Dashboard";
 import ProfilePage from "./pages/UserPages/ProfilePage";
 import Dashboard from "./pages/AdminPages/Dashboard";
+import UserPage from "./pages/UserPages/UserPage";
 import Users from "./pages/AdminPages/Users";
 import CalendarPage from "./pages/UserPages/CalendarPage";
 import AuthProvider from "./contexts/AuthContext";
@@ -33,7 +34,7 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/user/dashboard" element={<UserDashboard />} />
-            
+            <Route path="/user/userpage" element={<UserPage />} /> 
              <Route path="/user/notifications" element={<NotificationsPage />} />
             <Route path="/user/calendar" element={<CalendarPage />} />
             <Route path="/user/profile" element={<ProfilePage />} />
