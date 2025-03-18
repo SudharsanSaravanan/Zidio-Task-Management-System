@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import 'animate.css';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Landing = () => {
       {/* Hero Section */}
       <div className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+          <h1 className="animate__animated animate__pulse text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
             <span className="block">Welcome to</span>
             <span className="block text-blue-600">TaskFlow</span>
           </h1>
