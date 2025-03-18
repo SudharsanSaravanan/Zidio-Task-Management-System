@@ -4,13 +4,28 @@ import { useAuth } from "../../contexts/AuthContext";
 import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
-  const { logout, currentUser } = useAuth(); // Assuming currentUser contains user data (e.g., name)
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isLandingPage = location.pathname === "/";
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [userProfile, setUserProfile] = useState({
+    name: "User",
+    profilePic: "",
+  });
+
+  useEffect(() => {
+    // Fetch user profile from localStorage
+    const storedProfile = JSON.parse(localStorage.getItem("userProfile"));
+    if (storedProfile) {
+      setUserProfile({
+        name: storedProfile.name || "User",
+        profilePic: storedProfile.profilePic || "",
+      });
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -47,8 +62,16 @@ const Navbar = () => {
             className="flex items-center bg-white text-blue-600 font-medium px-4 py-2 rounded-lg shadow-md 
                        hover:bg-blue-700 hover:text-white transition-all focus:outline-none"
           >
-            <FaUserCircle className="text-2xl mr-2" />
-            <span>{currentUser?.profileName || "User"}</span> {/* Use saved profile name */}
+            {userProfile.profilePic ? (
+              <img
+                src={userProfile.profilePic}
+                alt="Profile"
+                className="w-8 h-8 rounded-full object-cover mr-2"
+              />
+            ) : (
+              <FaUserCircle className="text-2xl mr-2" />
+            )}
+            <span>{userProfile.name}</span> {/* Display user's name */}
           </button>
 
           {/* Dropdown Menu */}
