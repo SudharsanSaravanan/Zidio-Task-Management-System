@@ -154,6 +154,10 @@ npm install react-big-calendar
 
 Displaying tasks in a calendar view.
 
+### 13. Animation
+
+npm install animate.css --save
+
 ### for backend 
 npm install bcryptjs,cors,dotenv,express,jsonwebtoken,mongodb,mongoose
 npm install crypto nodemailer
