@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -10,12 +10,11 @@ const Signup = () => {
     confirmPassword: "",
   });
 
- // const { signup } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Extract role from state or default to "user"
   const role = location.state?.role || "user";
 
   const handleChange = (e) => {
@@ -31,62 +30,26 @@ const Signup = () => {
       return;
     }
 
-//     try {
-//       //await signup(formData.email, formData.password);
-// const res = await axios.post("http://localhost:5000/api/auth/register" , {
-// fullName: formData.fullName,
-//         email: formData.email,
-//         password: formData.password,
-//         role: role,
-// });
-// console.log("Signup Success:", res.data);
+    setLoading(true);
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/register", {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        role: role,
+      });
 
-// if (res.data.token) {
-//   // Save Token in Local Storage
-//   localStorage.setItem("token", res.data.token);
-
-//       // Redirect based on role
-//       if (role === "admin") {
-//         navigate("/admin/dashboard");
-//       } else {
-//         navigate("/user/dashboard");
-//       }
-      
-//     }
-//     else {
-//       setError("Failed to receive token. Try again.");
-//     }
-//     } catch (err) {
-//       console.log(err);
-//       setError("Failed to create an account. Try again.");
-//     }
-try {
-  const res = await axios.post("http://localhost:5000/api/auth/register", {
-    fullName: formData.fullName,
-    email: formData.email,
-    password: formData.password,
-    role: role, // Send role from frontend
-  });
-
-  //console.log("Signup Success:", res.data);
-
-  if (res.data.token) {
-    // Save Token in Local Storage
-    localStorage.setItem("token", res.data.token);
-
-    // Redirect Based on Role
-    if (role === "admin") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/user/dashboard");
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        navigate(role === "admin" ? "/admin/dashboard" : "/user/dashboard");
+      } else {
+        setError("Failed to receive token. Try again.");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create an account. Try again.");
+    } finally {
+      setLoading(false);
     }
-  } else {
-    setError("Failed to receive token. Try again.");
-  }
-} catch (err) {
-  console.error("Signup Error:", err.response?.data || err);
-  setError(err.response?.data?.message || "Failed to create an account. Try again.");
-}
   };
 
   return (
@@ -147,21 +110,21 @@ try {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition disabled:bg-gray-400"
+            disabled={loading}
           >
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
         <div className="text-center mt-3">
           <p className="text-sm text-gray-600">
-            Already have an account?{" "}
+            Already have an account? {" "}
             <span
-  className="text-blue-500 hover:underline cursor-pointer"
-  onClick={() => navigate("/login", { state: { role } })}
->
-  Log in
-</span>
-
+              className="text-blue-500 hover:underline cursor-pointer"
+              onClick={() => navigate("/login", { state: { role } })}
+            >
+              Log in
+            </span>
           </p>
         </div>
       </div>
