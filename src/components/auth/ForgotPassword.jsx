@@ -27,8 +27,7 @@ const ForgotPassword = () => {
 
       const data = await res.json();
       if (res.ok) {
-        setMessage(data.message);
-        // Navigate with role in state
+        setMessage("Reset link sent successfully. Check your email.");
         setTimeout(() => navigate("/login", { state: { role } }), 3000);
       } else {
         setError(data.message || "Something went wrong.");
@@ -41,9 +40,9 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-indigo-500">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
           {role === "admin" ? "Admin Password Recovery" : "Reset Your Password"}
         </h2>
         {message && <p className="text-green-500 text-sm text-center">{message}</p>}
@@ -69,12 +68,12 @@ const ForgotPassword = () => {
           </button>
         </form>
         <div className="text-center mt-3">
-        <span
-  className="text-blue-500 hover:underline cursor-pointer"
-  onClick={() => navigate("/login", { state: { role } })}
->
-  Log in
-</span>
+          <span
+            className="text-blue-500 hover:underline cursor-pointer"
+            onClick={() => navigate("/login", { state: { role } })}
+          >
+            Log in
+          </span>
         </div>
       </div>
     </div>

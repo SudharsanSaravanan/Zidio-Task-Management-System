@@ -9,76 +9,49 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState("");
-
-  // Extract role from state or default to "user"
+  
   const role = location.state?.role;
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await login(email, password);
-
-  //     // Redirect based on role
-  //     if (role === "admin") {
-  //       navigate("/admin/dashboard");
-  //     } else {
-  //       navigate("/user/dashboard");
-  //     }
-  //   } catch (err) {
-  //     setError("Invalid email or password");
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
-        //console.log("Attempting to log in with:", email, password); // ✅ Debugging step
-
         const response = await fetch("http://localhost:5000/api/auth/login", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password,role}),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password, role }),
         });
 
         const data = await response.json();
-        //console.log("Login Response:", data); // Check what backend is returning
-
         if (!response.ok) {
             setError(data.message || "Invalid credentials");
             return;
         }
 
-        // Save token in local storage or context
         localStorage.setItem("token", data.token);
-      //  console.log("Token stored:", data.token);
 
-        // Redirect based on role
         if (data.role === "admin") {
             navigate("/admin/dashboard");
         } else {
             navigate("/user/dashboard");
         }
     } catch (err) {
-      //  console.error("Login error:", err);
         setError("Server error, please try again.");
     }
-};
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 p-6">
+      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md transform transition duration-300 hover:scale-105">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           {role === "admin" ? "Admin Login" : "User Login"}
         </h2>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-gray-600 text-sm">Email</label>
+            <label className="block text-gray-700 text-sm font-medium">Email</label>
             <input
               type="email"
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -86,10 +59,10 @@ const Login = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-600 text-sm">Password</label>
+            <label className="block text-gray-700 text-sm font-medium">Password</label>
             <input
               type="password"
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -98,18 +71,18 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded-md hover:opacity-90 transition duration-200 shadow-md"
           >
             Login
           </button>
         </form>
-        <div className="text-center mt-3">
-        <span
-    className="text-blue-500 text-sm hover:underline cursor-pointer"
-    onClick={() => navigate("/forgot-password", { state: { role } })}
-  >
-    Forgot Password?
-  </span>
+        <div className="text-center mt-4">
+          <span
+            className="text-blue-600 text-sm hover:underline cursor-pointer"
+            onClick={() => navigate("/forgot-password", { state: { role } })}
+          >
+            Forgot Password?
+          </span>
         </div>
       </div>
     </div>
