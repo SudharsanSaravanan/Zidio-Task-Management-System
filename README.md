@@ -1,4 +1,4 @@
-# 🚀 Task Management System (React + Node.js)
+# 🚀 TaskFlow - Task Management System (React + Node.js)
 
 This is a **Task Management System** built using **React** for the frontend and **Node.js (MERN stack)** for the backend.  
 It supports **user authentication, task creation, admin management, and notifications.**
