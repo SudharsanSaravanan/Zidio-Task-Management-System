@@ -158,6 +158,10 @@ Displaying tasks in a calendar view.
 
 npm install animate.css --save
 
+### 14. Smooth Transition
+
+npm install framer-motion
+
 ### for backend 
 npm install bcryptjs,cors,dotenv,express,jsonwebtoken,mongodb,mongoose
 npm install crypto nodemailer
