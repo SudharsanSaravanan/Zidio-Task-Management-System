@@ -59,4 +59,20 @@ app.delete("/admin/users/:email", async (req, res) => {
     console.log(`Incoming request: ${req.method} ${req.url}`);
     next();
   });
+  app.put("/admin/users/:email", async (req, res) => {
+    const { email } = req.params;
+    const { fullName, role } = req.body;
+    
+    console.log("Received Update:", { fullName, role });
+  
+    const user = await User.findOneAndUpdate(
+      { email },
+      { fullName, role },
+      { new: true } // Ensure it returns updated data
+    );
+  
+    if (!user) return res.status(404).json({ message: "User not found" });
+  
+    res.json(user);
+  });
   
