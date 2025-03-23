@@ -122,7 +122,7 @@ const ManageUsers = () => {
   const [editedData, setEditedData] = useState({ fullName: "", email: "", role: "" });
 
   useEffect(() => {
-    fetch("http://localhost:5000/admin/users")
+    fetch("https://zidio-task-management-backend.onrender.com/admin/users")
       .then((res) => res.json())
       .then((data) => {
         const sortedUsers = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -142,7 +142,7 @@ const ManageUsers = () => {
 
   const saveUser = async (email) => {
     try {
-      const res = await fetch(`http://localhost:5000/admin/users/${email}`, {
+      const res = await fetch(`https://zidio-task-management-backend.onrender.com/admin/users/${email}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editedData),
@@ -159,7 +159,7 @@ const ManageUsers = () => {
 
   const deleteUser = async (email) => {
     try {
-      const res = await fetch(`http://localhost:5000/admin/users/${email}`, {
+      const res = await fetch(`https://zidio-task-management-backend.onrender.com/admin/users/${email}`, {
         method: "DELETE",
       });
 
