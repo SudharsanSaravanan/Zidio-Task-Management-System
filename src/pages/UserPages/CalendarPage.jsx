@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
@@ -19,12 +19,22 @@ const localizer = dateFnsLocalizer({
 });
 
 const CalendarPage = () => {
-  const [events, setEvents] = useState([
-    { title: "Project Deadline", start: new Date(2025, 2, 10), end: new Date(2025, 2, 10), type: "deadline" },
-    { title: "Team Meeting", start: new Date(2025, 2, 15), end: new Date(2025, 2, 15), type: "event" },
-  ]);
-
+  const [events, setEvents] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  // Fetch tasks from localStorage
+  useEffect(() => {
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    
+    const taskEvents = storedTasks.map((task) => ({
+      title: task.title,
+      start: new Date(task.deadline), 
+      end: new Date(task.deadline), 
+      type: "deadline",
+    }));
+
+    setEvents(taskEvents);
+  }, []);
 
   const handleSelectSlot = ({ start, end }) => {
     const title = prompt("Enter event title:");

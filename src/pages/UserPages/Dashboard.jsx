@@ -1,69 +1,65 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { DndContext, closestCorners } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { Bar } from "react-chartjs-2";
+import "chart.js/auto";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserSidebar from "./UserSidebar";
 import Column from "./Column";
 import SortableItem from "./SortableItem";
-import notificationSound from "../../assets/notification.mp3";
-import UserTaskAnalytics from "../../components/user/UserTaskAnalytics";
+import notificationSound from "./notification.mp3";
 
 const UserDashboard = () => {
   const [tasks, setTasks] = useState({
-    "To Do": [
-      { id: "1", title: "Design UI", description: "Create a sleek UI for the app", priority: "High", deadline: "2025-03-17" },
-      { id: "2", title: "Setup Database", description: "Initialize and structure the DB", priority: "Medium", deadline: "2025-03-18" },
-    ],
-    "In Progress": [{ id: "3", title: "Develop Auth System", description: "Implement JWT-based auth", priority: "High", deadline: "2025-03-15" }],
-    Completed: [{ id: "4", title: "Project Planning", description: "Outline roadmap and milestones", priority: "Low", deadline: "2025-03-05" }],
+    "To Do": [],
+    "In Progress": [],
+    Completed: [],
   });
 
-  const [notifications, setNotifications] = useState([]);
+  const [notes, setNotes] = useState(localStorage.getItem("notes") || "");
+
   const audioRef = useRef(new Audio(notificationSound));
 
-  const playSound = () => {
-    if (audioRef.current) {
-      audioRef.current.play().catch(() => console.log("User interaction required to play sound."));
-    }
-  };
+  useEffect(() => {
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const categorizedTasks = {
+      "To Do": storedTasks.filter((task) => task.progress <= 40),
+      "In Progress": storedTasks.filter((task) => task.progress > 40 && task.progress <= 80),
+      Completed: storedTasks.filter((task) => task.progress > 80),
+    };
+    setTasks(categorizedTasks);
+    checkDeadlines(storedTasks);
+  }, []);
 
   useEffect(() => {
-    const today = new Date();
-    let shouldPlaySound = false;
-    let newNotifications = [];
+    localStorage.setItem("notes", notes);
+  }, [notes]);
 
-    Object.keys(tasks).forEach((column) => {
-      tasks[column].forEach((task) => {
-        const taskDate = new Date(task.deadline);
-        const diffDays = Math.ceil((taskDate - today) / (1000 * 60 * 60 * 24));
+  const checkDeadlines = (tasks) => {
+    const today = new Date().toISOString().split("T")[0];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split("T")[0];
 
-        if (diffDays === 1) {
-          const message = `Hurry up! Task "${task.title}" is due tomorrow!`;
-          toast.warning(message, {
-            icon: "⚠️",
-            style: { backgroundColor: "#FFF4B0", color: "#000" },
-          });
-          newNotifications.push(message);
-          shouldPlaySound = true;
-        } else if (diffDays === 0) {
-          const message = `URGENT! Task "${task.title}" is due TODAY!`;
-          toast.error(message, {
-            icon: "🚨",
-            style: { backgroundColor: "#FF9999", color: "#FFF" },
-          });
-          newNotifications.push(message);
-          shouldPlaySound = true;
-        }
-      });
+    tasks.forEach((task) => {
+      if (task.deadline === today) {
+        showNotification(`🚨 Task Due Today: "${task.title}"`, "bg-red-500 text-white");
+      } else if (task.deadline === tomorrowStr) {
+        showNotification(`⏳ Task Due Tomorrow: "${task.title}"`, "bg-yellow-500 text-black");
+      }
     });
+  };
 
-    if (shouldPlaySound) {
-      playSound();
-    }
-
-    setNotifications(newNotifications);
-  }, [tasks]);
+  const showNotification = (message, bgClass) => {
+    toast(
+      <div className={`p-2 rounded-lg shadow-md font-semibold text-lg ${bgClass}`}>
+        {message}
+      </div>,
+      { position: "top-right", autoClose: 5000, hideProgressBar: false }
+    );
+    audioRef.current.play();
+  };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -74,46 +70,97 @@ const UserDashboard = () => {
     );
     const targetColumn = Object.keys(tasks).find((column) => tasks[column].some((task) => task.id === over.id)) || over.id;
 
-    if (!sourceColumn || !targetColumn) return;
+    if (!sourceColumn || !targetColumn || sourceColumn === targetColumn) return;
 
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
-
-      // Find and remove task from source column
       const movedTask = updatedTasks[sourceColumn].find((task) => task.id === active.id);
       updatedTasks[sourceColumn] = updatedTasks[sourceColumn].filter((task) => task.id !== active.id);
-
-      // Add the task to the target column
       updatedTasks[targetColumn] = [...(updatedTasks[targetColumn] || []), movedTask];
 
       return updatedTasks;
     });
+
+    localStorage.setItem("tasks", JSON.stringify([...tasks["To Do"], ...tasks["In Progress"], ...tasks["Completed"]]));
+  };
+
+  // Task Analytics Chart Data (Bar Graph)
+  const chartData = {
+    labels: ["To Do", "In Progress", "Completed"],
+    datasets: [
+      {
+        label: "Number of Tasks",
+        data: [
+          tasks["To Do"].length,
+          tasks["In Progress"].length,
+          tasks.Completed.length,
+        ],
+        backgroundColor: ["#FF6384", "#FFCE56", "#36A2EB"],
+      },
+    ],
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <UserSidebar notifications={notifications} />
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-100 to-gray-100">
+      <UserSidebar />
 
-      <div className="flex-1 p-6 bg-gradient-to-b from-blue-50 to-white">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">User Dashboard</h2>
+      <div className="flex-1 p-6">
+        <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+          🚀 User Dashboard
+        </h2>
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
 
-        <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.keys(tasks).map((columnKey) => (
-              <Column key={columnKey} title={columnKey} id={columnKey}>
-                <SortableContext items={tasks[columnKey].map((task) => task.id)} strategy={verticalListSortingStrategy}>
-                  {tasks[columnKey].map((task) => (
-                    <SortableItem key={task.id} id={task.id} task={task} />
-                  ))}
-                </SortableContext>
-              </Column>
-            ))}
-          </div>
-        </DndContext>
+        {/* Kanban Board */}
+        <div className="glassmorphism p-4 rounded-xl shadow-lg bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-lg border border-white/20">
+          <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.keys(tasks).map((columnKey) => (
+                <Column key={columnKey} title={columnKey} id={columnKey} className="w-[280px]">
+                  <SortableContext items={tasks[columnKey].map((task) => task.id)} strategy={verticalListSortingStrategy}>
+                    {tasks[columnKey].map((task) => (
+                      <SortableItem key={task.id} id={task.id} task={task} />
+                    ))}
+                  </SortableContext>
+                </Column>
+              ))}
+            </div>
+          </DndContext>
+        </div>
 
-        <div className="mt-8">
-          <UserTaskAnalytics completedTasks={[5, 10, 7, 12]} pendingTasks={[3, 2, 5, 1]} />
+        {/* Task Analytics & Notes Section */}
+        <div className="mt-10 flex flex-col lg:flex-row items-start gap-6">
+          {/* Task Analytics Chart */}
+          <div className="p-6 w-full lg:w-1/2 bg-white shadow-lg rounded-xl border border-gray-300">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-4 text-center tracking-wide uppercase">
+              📊 Task Analytics
+            </h2>
+            <Bar data={chartData} />
+          </div>
+
+          {/* Notes */}
+          <div className="p-6 w-full lg:w-[590px] bg-green-900 text-white rounded-xl border-[12px] border-[#8B4501] shadow-lg flex flex-col">
+          <h2 className="text-2xl font-bold text-yellow-400 mb-2 text-center">
+            📌 Notes
+          </h2>
+
+  {/* Notes Input Field - Enlarged to match Task Analytics */}
+  <textarea
+    className="flex-1 bg-transparent border-none outline-none text-white text-lg p-7"
+    placeholder="Write your notes here..."
+    value={notes}
+    onChange={(e) => setNotes(e.target.value)}
+    autoFocus
+    style={{
+      fontFamily: "Chalkduster, Comic Sans MS, cursive",
+      height: "320px", 
+      minHeight: "280px", 
+      textAlign: "left", 
+      resize: "none",
+    }}
+  />
+</div>
+
+
         </div>
       </div>
     </div>
