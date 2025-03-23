@@ -2,11 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 const RecentUsers = () => {
-  // const users = [
-  //   { name: "Alice Johnson", email: "alice@example.com", date: "2025-03-10" },
-  //   { name: "Bob Smith", email: "bob@example.com", date: "2025-03-09" },
-  //   { name: "Charlie Brown", email: "charlie@example.com", date: "2025-03-08" },
-  // ];
 
   const [users, setUsers] = useState([]);
 
