@@ -1,31 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { FaChartPie, FaUsers, FaTasks, FaCog } from "react-icons/fa";
 
 const Sidebar = () => {
+  const location = useLocation();
+
+  // Sidebar menu items with icons
+  const menuItems = [
+    { path: "/admin/dashboard", label: "Dashboard", icon: <FaChartPie /> },
+    { path: "/admin/manage-users", label: "Manage Users", icon: <FaUsers /> },
+    { path: "/admin/manage-tasks", label: "Manage Tasks", icon: <FaTasks /> },
+    { path: "/admin/settings", label: "Settings", icon: <FaCog /> },
+  ];
+
   return (
-    <div className="w-64 bg-gray-800 text-white min-h-screen p-4">
-      <h2 className="text-2xl font-bold mb-6">Admin Panel</h2>
-      <ul>
-        <li className="mb-2">
-          <Link to="/admin/dashboard" className="block py-2 px-4 hover:bg-gray-700 rounded">
-            Dashboard
-          </Link>
-        </li>
-        <li className="mb-2">
-          <Link to="/admin/manage-users" className="block py-2 px-4 hover:bg-gray-700 rounded">
-            Manage Users
-          </Link>
-        </li>
-        <li className="mb-2">
-          <Link to="/admin/manage-tasks" className="block py-2 px-4 hover:bg-gray-700 rounded">
-            Manage Tasks
-          </Link>
-        </li>
-        <li className="mb-2">
-          <Link to="/admin/settings" className="block py-2 px-4 hover:bg-gray-700 rounded">
-            Settings
-          </Link>
-        </li>
+    <div className="w-64 min-h-screen p-6 bg-gray-900 text-white glassmorphism border-r border-gray-700">
+      <h2 className="text-2xl font-extrabold text-center text-gray-100 tracking-wide mb-6">⚙️ Admin Panel</h2>
+
+      <ul className="space-y-3">
+        {menuItems.map(({ path, label, icon }) => (
+          <li key={path}>
+            <Link
+              to={path}
+              className={`flex items-center gap-3 py-3 px-5 rounded-lg transition-all duration-200 text-lg font-medium ${
+                location.pathname === path
+                  ? "bg-blue-600 shadow-lg transform scale-105"
+                  : "hover:bg-blue-700 hover:scale-105 transition"
+              }`}
+            >
+              <span className="text-xl">{icon}</span>
+              {label}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

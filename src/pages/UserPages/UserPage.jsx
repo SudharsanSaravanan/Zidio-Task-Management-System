@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const UserPage = () => {
   const [tasks, setTasks] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState(""); // ✅ Store logged-in user
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -14,6 +15,11 @@ const UserPage = () => {
   });
 
   useEffect(() => {
+    // ✅ Fetch logged-in user from localStorage
+    const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    setLoggedInUser(storedUser?.name || "Unknown User");
+
+    // ✅ Fetch stored tasks
     const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
     setTasks(storedTasks);
   }, []);
@@ -24,7 +30,13 @@ const UserPage = () => {
     if (!newTask.title.trim() || !newTask.description.trim()) return;
 
     const taskId = Date.now().toString();
-    const newTaskItem = { id: taskId, ...newTask };
+    
+    // ✅ Assign task to logged-in user
+    const newTaskItem = { 
+      id: taskId, 
+      ...newTask, 
+      assignedTo: loggedInUser // ✅ Store assigned user
+    };
 
     const updatedTasks = [...tasks, newTaskItem];
     setTasks(updatedTasks);
@@ -66,13 +78,12 @@ const UserPage = () => {
       <UserSidebar />
 
       <div className="flex-1 p-6">
-      <h1 className="text-4xl font-bold mb-6 text-center w-full">
-  <span>🎯</span> 
-  <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-    User Task Management
-  </span>
-</h1>
-
+        <h1 className="text-4xl font-bold mb-6 text-center w-full">
+          <span>🎯</span> 
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+            User Task Management
+          </span>
+        </h1>
 
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
@@ -138,7 +149,7 @@ const UserPage = () => {
           </form>
         </div>
 
-        {/* Task List with Progress and Delete Option */}
+        {/* Task List */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tasks.length === 0 ? (
             <p className="text-gray-600">No tasks created yet. Start by adding a task!</p>
@@ -153,23 +164,16 @@ const UserPage = () => {
                 </span>
 
                 <p className="text-sm text-gray-700 mt-1">
+                  <span className="font-semibold">Assigned To:</span> {task.assignedTo}
+                </p>
+
+                <p className="text-sm text-gray-700 mt-1">
                   <span className="font-semibold">Deadline:</span> {task.deadline}
                 </p>
 
-                {/* Task Progress Section */}
+                {/* Task Progress */}
                 <div className="mt-4">
                   <label className="block text-sm font-medium text-gray-700">Progress:</label>
-
-                  <div className="relative w-full h-4 bg-gray-300 rounded-full overflow-hidden mt-1">
-                    <div
-                      style={{
-                        width: `${task.progress}%`,
-                        transition: "width 0.5s ease-in-out",
-                      }}
-                      className="h-full bg-gradient-to-r from-blue-500 to-blue-700 rounded-full"
-                    ></div>
-                  </div>
-
                   <input
                     type="range"
                     min="0"
@@ -178,7 +182,6 @@ const UserPage = () => {
                     onChange={(e) => updateProgress(task.id, e.target.value)}
                     className="w-full mt-2 accent-blue-600"
                   />
-
                   <span className="text-sm font-medium text-gray-700">{task.progress}% Completed</span>
                 </div>
 
