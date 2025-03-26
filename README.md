@@ -25,7 +25,7 @@ Whether you're managing personal tasks or collaborating with a team, **TaskFlow*
 
 ---
 
-## 📂 Project Structure  
+## 📂Frontend Project Structure  
 
 ```
 /task-management-app/
@@ -157,7 +157,8 @@ npm install react-big-calendar
 npm install bcryptjs cors dotenv express jsonwebtoken mongoose
 npm install crypto nodemailer
 ```
-
+## Deployment Link  
+https://zidio-task-management-system.vercel.app/
 ---
 
 ## 🚀 Features Breakdown  
