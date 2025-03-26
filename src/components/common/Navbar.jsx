@@ -7,26 +7,36 @@ const Navbar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const hideProfileRoutes = ["/", "/login", "/signup"]; 
+  const hideProfileRoutes = ["/", "/login", "/signup"];
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [userProfile, setUserProfile] = useState({ name: "User", profilePic: "" });
+  const [profile, setProfile] = useState({ name: "User", profilePic: "", role: "user" });
 
   useEffect(() => {
-    // Fetch user profile from localStorage
-    const storedProfile = JSON.parse(localStorage.getItem("userProfile"));
+    // Check if user is in admin or user portal
+    const isAdminPortal = location.pathname.startsWith("/admin");
+
+    // Load correct profile from localStorage
+    const storedProfile = JSON.parse(localStorage.getItem(isAdminPortal ? "adminProfile" : "userProfile"));
+    
     if (storedProfile) {
-      setUserProfile({
+      setProfile({
         name: storedProfile.name || "User",
         profilePic: storedProfile.profilePic || "",
+        role: storedProfile.role || (isAdminPortal ? "admin" : "user"), // Ensure role is set
       });
     }
-  }, []);
+  }, [location.pathname]); // Re-run when path changes
 
   const handleLogout = async () => {
     try {
       await logout();
+      const isAdminPortal = location.pathname.startsWith("/admin");
+
+      // Remove the correct profile from storage
+      localStorage.removeItem(isAdminPortal ? "adminProfile" : "userProfile");
+
       navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
@@ -35,29 +45,35 @@ const Navbar = () => {
 
   const handleLogoClick = (e) => {
     e.preventDefault();
+
     setTimeout(() => {
-      navigate(userProfile.name !== "User" ? "user/dashboard" : "/");
-    }, 350); 
-  };
-  
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
+      const isAdminPortal = location.pathname.startsWith("/admin");
+
+      if (isAdminPortal) {
+        if (location.pathname === "/admin/dashboard") {
+          window.location.reload(); // Refresh if already on admin dashboard
+        } else {
+          navigate("/admin/dashboard"); // Redirect to admin dashboard
+        }
+      } else {
+        if (location.pathname === "/user/dashboard") {
+          window.location.reload(); // Refresh if already on user dashboard
+        } else {
+          navigate("/user/dashboard"); // Redirect to user dashboard
+        }
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    }, 500);
+  };
 
   return (
     <nav className="bg-blue-600 text-white px-5 py-4 flex justify-between items-center shadow-lg">
       {/* Logo with Image & Text */}
-      <Link 
-  to={userProfile.name !== "user" ? "user/dashboard" : "/"} 
-  onClick={handleLogoClick}
-  className="flex items-center text-3xl font-bold tracking-wide hover:opacity-70 transition">
-        <img src="/app_icon.png" alt="TaskFlow Logo" className="w-12 h-12 rounded-full mr-2" /> 
+      <Link
+        to="/"
+        onClick={handleLogoClick}
+        className="flex items-center text-3xl font-bold tracking-wide hover:opacity-70 transition"
+      >
+        <img src="/app_icon.png" alt="TaskFlow Logo" className="w-12 h-12 rounded-full mr-2" />
         TaskFlow
       </Link>
 
@@ -70,16 +86,16 @@ const Navbar = () => {
               className="flex items-center bg-white text-blue-600 font-medium px-4 py-2 rounded-lg shadow-md 
                          hover:bg-blue-700 hover:text-white transition-all focus:outline-none"
             >
-              {userProfile.profilePic ? (
+              {profile.profilePic ? (
                 <img
-                  src={userProfile.profilePic}
+                  src={profile.profilePic}
                   alt="Profile"
                   className="w-8 h-8 rounded-full object-cover mr-2"
                 />
               ) : (
                 <FaUserCircle className="text-2xl mr-2" />
               )}
-              <span>{userProfile.name}</span> {/* Display user's name */}
+              <span>{profile.name}</span> {/* Display user's name */}
             </button>
 
             {/* Dropdown Menu */}
@@ -88,8 +104,8 @@ const Navbar = () => {
                 <ul className="text-gray-700">
                   <li>
                     <Link
-                      to="/user/profile"
-                      className="block px-4 py-2 hover:bg-gray-100"
+                      to={profile.role === "admin" ? "/admin/profile" : "/user/profile"}
+                      className="block px-4 py-2 hover:bg-gray-200 transition"
                       onClick={() => setDropdownOpen(false)}
                     >
                       Profile
@@ -97,7 +113,7 @@ const Navbar = () => {
                   </li>
                   <li>
                     <button
-                      className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
+                      className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 transition"
                       onClick={handleLogout}
                     >
                       Logout

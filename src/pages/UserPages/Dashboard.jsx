@@ -18,8 +18,12 @@ const UserDashboard = () => {
   });
 
   const [notes, setNotes] = useState(localStorage.getItem("notes") || "");
-
   const audioRef = useRef(new Audio(notificationSound));
+
+  // 🔹 Ensure page starts from top when component loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -139,28 +143,24 @@ const UserDashboard = () => {
 
           {/* Notes */}
           <div className="p-6 w-full lg:w-[590px] bg-green-900 text-white rounded-xl border-[12px] border-[#8B4501] shadow-lg flex flex-col">
-          <h2 className="text-2xl font-bold text-yellow-400 mb-2 text-center">
-            📌 Notes
-          </h2>
+            <h2 className="text-2xl font-bold text-yellow-400 mb-2 text-center">📌 Notes</h2>
 
-  {/* Notes Input Field - Enlarged to match Task Analytics */}
-  <textarea
-    className="flex-1 bg-transparent border-none outline-none text-white text-lg p-7"
-    placeholder="Write your notes here..."
-    value={notes}
-    onChange={(e) => setNotes(e.target.value)}
-    autoFocus
-    style={{
-      fontFamily: "Chalkduster, Comic Sans MS, cursive",
-      height: "320px", 
-      minHeight: "280px", 
-      textAlign: "left", 
-      resize: "none",
-    }}
-  />
-</div>
-
-
+            {/* Notes Input Field - Enlarged to match Task Analytics */}
+            <textarea
+              className="flex-1 bg-transparent border-none outline-none text-white text-lg p-7"
+              placeholder="Write your notes here..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              autoFocus
+              style={{
+                fontFamily: "Chalkduster, Comic Sans MS, cursive",
+                height: "320px",
+                minHeight: "280px",
+                textAlign: "left",
+                resize: "none",
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

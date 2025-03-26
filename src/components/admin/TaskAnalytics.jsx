@@ -1,29 +1,39 @@
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import "chart.js/auto";
 
 const TaskAnalytics = () => {
-  const data = {
-    labels: ["January", "February", "March", "April"],
+  const [taskStats, setTaskStats] = useState({
+    todo: 0,
+    inProgress: 0,
+    completed: 0,
+  });
+
+  useEffect(() => {
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const updatedStats = {
+      todo: storedTasks.filter((task) => task.progress <= 40).length,
+      inProgress: storedTasks.filter((task) => task.progress > 40 && task.progress <= 80).length,
+      completed: storedTasks.filter((task) => task.progress > 80).length,
+    };
+    setTaskStats(updatedStats);
+  }, []);
+
+  const chartData = {
+    labels: ["To Do", "In Progress", "Completed"],
     datasets: [
       {
-        label: "Completed Tasks",
-        data: [40, 55, 70, 85],
-        backgroundColor: "rgba(54, 162, 235, 0.6)",
-      },
-      {
-        label: "Pending Tasks",
-        data: [20, 15, 10, 5],
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        label: "Number of Tasks",
+        data: [taskStats.todo, taskStats.inProgress, taskStats.completed],
+        backgroundColor: ["#FF6384", "#FFCE56", "#36A2EB"],
       },
     ],
   };
 
   return (
-    <div className="bg-white p-4 shadow rounded-lg">
-      <h3 className="text-xl font-semibold mb-2">Task Analytics</h3>
-      <Bar data={data} />
+    <div className="p-4 bg-white shadow rounded-lg">
+      <h2 className="text-lg font-semibold text-center mb-4">📊 Task Analytics</h2>
+      <Bar data={chartData} />
     </div>
   );
 };
