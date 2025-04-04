@@ -154,7 +154,8 @@ npm install react-big-calendar
 
 ### 🔒 Backend & Security  
 ```sh
-npm install bcryptjs cors dotenv express jsonwebtoken mongoose
+npm install bcryptjs cors dotenv express
+npm i jsonwebtoken mongoose
 npm install crypto nodemailer
 ```
 ## Deployment Link  
