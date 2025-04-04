@@ -118,8 +118,10 @@ EMAIL_PASS=your_email_password
 
 #### 🚀 Start Backend Server  
 ```sh
+for local environment
 cd server
 node src/index.js
+backend deployed on render
 ```
 
 #### 🚀 Start Frontend Development Server  
