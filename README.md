@@ -160,9 +160,6 @@ npm install bcryptjs cors dotenv express
 npm i jsonwebtoken mongoose
 npm install crypto nodemailer
 ```
-## Deployment Link  
-https://zidio-task-management-system.vercel.app/
----
 
 ## 🚀 Features Breakdown  
 
